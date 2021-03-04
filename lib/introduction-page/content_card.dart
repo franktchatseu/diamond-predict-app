@@ -1,9 +1,10 @@
+import 'package:diamond_app/form_ui/form_diamond.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
 import 'package:flutter/scheduler.dart';
 
-import 'main.dart';
+import '../main.dart';
 
 class ContentCard extends StatefulWidget {
   final String color;
@@ -117,7 +118,9 @@ class _ContentCardState extends State<ContentCard> {
                     )
               ),
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>DiamondForm()));
+            },
           ),
         )
       ],

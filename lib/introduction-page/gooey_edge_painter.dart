@@ -3,7 +3,7 @@ import 'gooey_edge.dart';
 
 // This isn't used in the example, but it can be used to quickly paint a GooeyEdge to a canvas.
 class GooeyEdgePainter extends CustomPainter {
-  GooeyEdge edge;
+  GooeyEdgee edge;
 
   GooeyEdgePainter({@required this.edge});
 

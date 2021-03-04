@@ -24,10 +24,12 @@ dependencies:
   flutter:
     sdk: flutter
 
-
+  dio: ^3.0.2
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
+  giffy_dialog: ^1.8.0
+
 
 dev_dependencies:
   flutter_test:
@@ -46,6 +48,8 @@ flutter:
 
   assets:
     - images/
+    - images/Header-Dark.png
+    - images/rappi_basket.gif
 
   fonts:
     - family: OpenSans
@@ -78,6 +82,9 @@ flutter:
         - asset: fonts/DM-Serif-Display/DMSerifDisplay-Regular.ttf
         - asset: fonts/DM-Serif-Display/DMSerifDisplay-Italic.ttf
           style: italic
+    - family: Google Sans
+      fonts:
+        - asset: fonts/GoogleSans-Regular.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:

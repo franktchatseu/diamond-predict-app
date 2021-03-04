@@ -2,8 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/widgets.dart';
 
-import 'main.dart';
-
 class SunAndMoon extends StatefulWidget {
   final bool isDragComplete;
   final List<String> assetPaths;

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'side.dart';
-import 'sun_moon.dart';
+import '../introduction-page//sun_moon.dart';
 
 import 'gooey_edge.dart';
-import 'gooey_edge_clipper.dart';
+import '../introduction-page//gooey_edge_clipper.dart';
 
 class GooeyCarousel extends StatefulWidget {
   final List<Widget> children;
@@ -22,13 +22,13 @@ class GooeyCarouselState extends State<GooeyCarousel> with SingleTickerProviderS
   double _dragDirection; // +1 when dragging left to right, -1 for right to left
   bool _dragCompleted; // has the drag successfully resulted in a swipe
   
-  GooeyEdge _edge;
+  GooeyEdgee _edge;
   Ticker _ticker;
   GlobalKey _key = GlobalKey();
 
   @override
   void initState() {
-    _edge = GooeyEdge(count: 25);
+    _edge = GooeyEdgee(count: 25);
     _ticker = createTicker(_tick)..start();
     super.initState();
   }

@@ -1,8 +1,8 @@
+import 'package:diamond_app/introduction-page/gooey_edge.dart';
 import 'package:flutter/material.dart';
-import 'gooey_edge.dart';
 
 class GooeyEdgeClipper extends CustomClipper<Path> {
-  GooeyEdge edge;
+  GooeyEdgee edge;
   double margin;
 
   GooeyEdgeClipper(this.edge, {this.margin=0.0}) : super();
