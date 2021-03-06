@@ -65,7 +65,7 @@ class _ContentCardState extends State<ContentCard> {
                   flex: 3,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Image.asset('images/Illustration-${widget.color}.png', fit: BoxFit.contain,),
+                    child: Image.asset(widget.color != "Yellow"?'images/diamond_image-${widget.color}.png':'images/diamond_image-Red.png', fit: BoxFit.contain,),
                   ),
                 ),
 

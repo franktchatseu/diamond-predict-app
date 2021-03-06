@@ -26,14 +26,14 @@ class _GooeyEdgeDemoState extends State<GooeyEdgeDemo> {
             subtitle: 'Predict the Price of your Diamond',
           ),
           ContentCard(
-            color: 'Yellow',
+            color: 'Blue',
             altColor: Color(0xFF904E93),
             title: "Savourez le fruit d'une intélligence artificiel",
             subtitle:
             'Savor the fruit of artificial intelligence.',
           ),
           ContentCard(
-            color: 'Blue',
+            color: 'Yellow',
             altColor: Color(0xFFFFB138),
             title: "Faites votre prédiction en un clic",
             subtitle:

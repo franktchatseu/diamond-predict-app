@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:diamond_app/form_ui/rounded_shadow.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:giffy_dialog/giffy_dialog.dart';
 
 //
@@ -118,6 +120,7 @@ class _DiamondFormState extends State<DiamondForm> {
   double _width;
   double _z_depth;
 
+  bool loader = false;
   //dialog result
   void show_dialog(BuildContext con,dynamic result) {
     showDialog(
@@ -141,8 +144,8 @@ class _DiamondFormState extends State<DiamondForm> {
           onOkButtonPressed: () {
             //go to add etablish screen
             Navigator.pop(context);
-           // Navigator.push(context,
-               // MaterialPageRoute(builder: (context) => EtablishAdd()));
+            Navigator.popAndPushNamed(context, "/predict");
+
           },
           onlyOkButton: true,
           buttonOkColor: Colors.teal.shade500,
@@ -159,6 +162,9 @@ class _DiamondFormState extends State<DiamondForm> {
 
   // get prediction
    Future<void> prediction() async {
+      this.setState(() {
+        this.loader = true;
+      });
      String url_server = 'https://diamondspricepredict.herokuapp.com/prediction-api';
      var data = {
        'carat': this._carat_name,
@@ -196,6 +202,9 @@ class _DiamondFormState extends State<DiamondForm> {
              content: Text("Erreur de prédiction!"),
            ));
      }
+     this.setState(() {
+       this.loader = false;
+     });
    }
 
   @override
@@ -249,499 +258,464 @@ class _DiamondFormState extends State<DiamondForm> {
               ),
             ],
           ),),
-      body: ListView(
-        children: [
-        Stack(
-          children: [
-            Container(
-              alignment: Alignment.topCenter,
-              height: 80,
-              child: RoundedShadow(
-                  topLeftRadius: 0,
-                  topRightRadius: 0,
-                  shadowColor: Color(0x0).withAlpha(65),
-                  child: Container(
-                    width: double.infinity,
-                    child: Image.asset("images/Header-Dark.png", fit: BoxFit.fill),
-                  )),
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return <Widget>[
+            SliverAppBar(
+              expandedHeight: 100.0,
+              floating: false,
+              pinned: true,
+              flexibleSpace: FlexibleSpaceBar(
+                  centerTitle: true,
+                  title: Text("Estimer le prix de votre diamand",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16.0,
+                      )),
+                  background: Image.asset("images/Header-Dark.png",fit: BoxFit.cover,)),
             ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                height: 60,
-                child: Center(child: Text("Remplissez les information dans le formulaire",style: TextStyle(fontFamily: 'Google Sans',color: Colors.white,fontSize: 16),)),
+          ];
+        },
+
+        body: ListView(
+          children: [
+
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20,),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Entrer le carat",
+                    style: TextStyle(
+                        fontFamily: "Google Sans",
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.teal.shade900),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+//vidéo link
+                  Container(
+                    height: 35,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      border: Border.all(width: 1.5, color: Colors.blueGrey),
+                    ),
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'Google Sans',
+                          color: Colors.black87),
+                      textAlign: TextAlign.start,
+                      textAlignVertical: TextAlignVertical.center,
+                      decoration: InputDecoration(
+                          hintText: "enter the carat value",
+                          contentPadding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                          hintStyle: TextStyle(fontSize: 16),
+                          border: InputBorder.none),
+                      onChanged: (value) {
+                        setState(() {
+                          this._carat_name = double.parse(value);
+                        });
+                      },
+                    ),
+                  ),
+                ],
               ),
-            )
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Entrer le Depth",
+                    style: TextStyle(
+                        fontFamily: "Google Sans",
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.teal.shade900),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+//vidéo link
+                  Container(
+                    height: 35,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      border: Border.all(width: 1.5, color: Colors.blueGrey),
+                    ),
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'Google Sans',
+                          color: Colors.black87),
+                      textAlign: TextAlign.start,
+                      textAlignVertical: TextAlignVertical.center,
+                      decoration: InputDecoration(
+                          hintText: "enter the depth value",
+                          contentPadding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                          hintStyle: TextStyle(fontSize: 16),
+                          border: InputBorder.none),
+                      onChanged: (value) {
+                        setState(() {
+                          this._depth = double.parse(value);
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Entrer le Table",
+                    style: TextStyle(
+                        fontFamily: "Google Sans",
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.teal.shade900),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+//vidéo link
+                  Container(
+                    height: 35,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      border: Border.all(width: 1.5, color: Colors.blueGrey),
+                    ),
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'Google Sans',
+                          color: Colors.black87),
+                      textAlign: TextAlign.start,
+                      textAlignVertical: TextAlignVertical.center,
+                      decoration: InputDecoration(
+                          hintText: "enter the table value",
+                          contentPadding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                          hintStyle: TextStyle(fontSize: 16),
+                          border: InputBorder.none),
+                      onChanged: (value) {
+                        setState(() {
+                          this._table = double.parse(value);
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    " qualité de la coupure",
+                    style: TextStyle(
+                        fontFamily: "Google Sans",
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.teal.shade900),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Container(
+                    height: 35,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      border: Border.all(width: 1.5, color: Colors.blueGrey),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 20),
+                      child: DropdownButton<dynamic>(
+                        value: _cut,
+                        hint: Text("Diamant bien taillé ?"),
+                        underline: SizedBox(),
+                        icon: Icon(
+                          Icons.arrow_drop_down,
+                          size: 35,
+                          color: Colors.teal.shade900,
+                        ),
+                        isExpanded: true,
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: 'Google Sans',
+                            color: Colors.black),
+                        items: this.cuts.map<DropdownMenuItem<dynamic>>((dynamic value) {
+                          return DropdownMenuItem<dynamic>(
+                            value: value,
+                            child: Text(value["label"]),
+                          );
+                        }).toList(),
+                        onChanged: (newValue) {
+                          setState(() {
+                            this._cut = newValue;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    " Préciser la couleur",
+                    style: TextStyle(
+                        fontFamily: "Google Sans",
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.teal.shade900),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Container(
+                    height: 35,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      border: Border.all(width: 1.5, color: Colors.blueGrey),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 20),
+                      child: DropdownButton<dynamic>(
+                        value: _color,
+                        hint: Text("choose the color "),
+                        underline: SizedBox(),
+                        icon: Icon(
+                          Icons.arrow_drop_down,
+                          size: 35,
+                          color: Colors.teal.shade900,
+                        ),
+                        isExpanded: true,
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: 'Google Sans',
+                            color: Colors.black),
+                        items: this.colors.map<DropdownMenuItem<dynamic>>((dynamic value) {
+                          return DropdownMenuItem<dynamic>(
+                            value: value,
+                            child: Text(value["label"]),
+                          );
+                        }).toList(),
+                        onChanged: (newValue) {
+                          setState(() {
+                            this._color = newValue;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    " Clarté",
+                    style: TextStyle(
+                        fontFamily: "Google Sans",
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.teal.shade900),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Container(
+                    height: 35,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      border: Border.all(width: 1.5, color: Colors.blueGrey),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 20),
+                      child: DropdownButton<dynamic>(
+                        value: _clarety,
+                        hint: Text("Purety "),
+                        underline: SizedBox(),
+                        icon: Icon(
+                          Icons.arrow_drop_down,
+                          size: 35,
+                          color: Colors.teal.shade900,
+                        ),
+                        isExpanded: true,
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: 'Google Sans',
+                            color: Colors.black),
+                        items: this.clareties.map<DropdownMenuItem<dynamic>>((dynamic value) {
+                          return DropdownMenuItem<dynamic>(
+                            value: value,
+                            child: Text(value["label"]),
+                          );
+                        }).toList(),
+                        onChanged: (newValue) {
+                          setState(() {
+                            this._clarety = newValue;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Container(
+                      height: 35,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        border: Border.all(width: 1.5, color: Colors.blueGrey),
+                      ),
+                      child: TextField(
+                        keyboardType: TextInputType.number,
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontFamily: 'Google Sans',
+                            color: Colors.black87),
+                        textAlign: TextAlign.start,
+                        textAlignVertical: TextAlignVertical.center,
+                        decoration: InputDecoration(
+                            hintText: "length (mm)",
+                            contentPadding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                            hintStyle: TextStyle(fontSize: 16),
+                            border: InputBorder.none),
+                        onChanged: (value) {
+                          setState(() {
+                            this._length = double.parse(value);
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      height: 35,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        border: Border.all(width: 1.5, color: Colors.blueGrey),
+                      ),
+                      child: TextField(
+                        keyboardType: TextInputType.number,
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontFamily: 'Google Sans',
+                            color: Colors.black87),
+                        textAlign: TextAlign.start,
+                        textAlignVertical: TextAlignVertical.center,
+                        decoration: InputDecoration(
+                            hintText: "width (mm)",
+                            contentPadding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                            hintStyle: TextStyle(fontSize: 16),
+                            border: InputBorder.none),
+                        onChanged: (value) {
+                          setState(() {
+                            this._width = double.parse(value);
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      height: 35,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        border: Border.all(width: 1.5, color: Colors.blueGrey),
+                      ),
+                      child: TextField(
+                        keyboardType: TextInputType.number,
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontFamily: 'Google Sans',
+                            color: Colors.black87),
+                        textAlign: TextAlign.start,
+                        textAlignVertical: TextAlignVertical.center,
+                        decoration: InputDecoration(
+                            hintText: "depth (mm)",
+                            contentPadding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                            hintStyle: TextStyle(fontSize: 16),
+                            border: InputBorder.none),
+                        onChanged: (value) {
+                          setState(() {
+                            this._z_depth = double.parse(value);
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30,vertical: 20),
+              child: this.loader == false?FlatButton(
+                  height: 40,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30)),
+                  color: Colors.teal.shade500,
+                  onPressed: () => {
+                    prediction()
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Estimer le Prix",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 17,
+                            color: Colors.white,
+                            fontFamily: 'Google Sans'),
+                      )
+                    ],
+                  )):CupertinoActivityIndicator(radius: 25,animating: true,),
+            ),
+
 
           ],
         ),
-
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Entrer le carat",
-                  style: TextStyle(
-                      fontFamily: "Google Sans",
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.teal.shade900),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                //vidéo link
-                Container(
-                  height: 35,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(width: 1.5, color: Colors.blueGrey),
-                  ),
-                  child: TextField(
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontFamily: 'Google Sans',
-                        color: Colors.black87),
-                    textAlign: TextAlign.start,
-                    textAlignVertical: TextAlignVertical.center,
-                    decoration: InputDecoration(
-                        hintText: "enter the carat value",
-                        contentPadding:
-                        EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                        hintStyle: TextStyle(fontSize: 16),
-                        border: InputBorder.none),
-                    onChanged: (value) {
-                      setState(() {
-                        this._carat_name = double.parse(value);
-                      });
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Entrer le Depth",
-                  style: TextStyle(
-                      fontFamily: "Google Sans",
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.teal.shade900),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                //vidéo link
-                Container(
-                  height: 35,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(width: 1.5, color: Colors.blueGrey),
-                  ),
-                  child: TextField(
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontFamily: 'Google Sans',
-                        color: Colors.black87),
-                    textAlign: TextAlign.start,
-                    textAlignVertical: TextAlignVertical.center,
-                    decoration: InputDecoration(
-                        hintText: "enter the depth value",
-                        contentPadding:
-                        EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                        hintStyle: TextStyle(fontSize: 16),
-                        border: InputBorder.none),
-                    onChanged: (value) {
-                      setState(() {
-                        this._depth = double.parse(value);
-                      });
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Entrer le Table",
-                  style: TextStyle(
-                      fontFamily: "Google Sans",
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.teal.shade900),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                //vidéo link
-                Container(
-                  height: 35,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(width: 1.5, color: Colors.blueGrey),
-                  ),
-                  child: TextField(
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontFamily: 'Google Sans',
-                        color: Colors.black87),
-                    textAlign: TextAlign.start,
-                    textAlignVertical: TextAlignVertical.center,
-                    decoration: InputDecoration(
-                        hintText: "enter the table value",
-                        contentPadding:
-                        EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                        hintStyle: TextStyle(fontSize: 16),
-                        border: InputBorder.none),
-                    onChanged: (value) {
-                      setState(() {
-                        this._table = double.parse(value);
-                      });
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  " qualité de la coupure",
-                  style: TextStyle(
-                      fontFamily: "Google Sans",
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.teal.shade900),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                Container(
-                  height: 35,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(width: 1.5, color: Colors.blueGrey),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: DropdownButton<dynamic>(
-                      value: _cut,
-                      hint: Text("Diamant bien taillé ?"),
-                      underline: SizedBox(),
-                      icon: Icon(
-                        Icons.arrow_drop_down,
-                        size: 35,
-                        color: Colors.teal.shade900,
-                      ),
-                      isExpanded: true,
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontFamily: 'Google Sans',
-                          color: Colors.black),
-                      items: this.cuts.map<DropdownMenuItem<dynamic>>((dynamic value) {
-                        return DropdownMenuItem<dynamic>(
-                          value: value,
-                          child: Text(value["label"]),
-                        );
-                      }).toList(),
-                      onChanged: (newValue) {
-                        setState(() {
-                          this._cut = newValue;
-                        });
-                      },
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  " Préciser la couleur",
-                  style: TextStyle(
-                      fontFamily: "Google Sans",
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.teal.shade900),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                Container(
-                  height: 35,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(width: 1.5, color: Colors.blueGrey),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: DropdownButton<dynamic>(
-                      value: _color,
-                      hint: Text("choose the color "),
-                      underline: SizedBox(),
-                      icon: Icon(
-                        Icons.arrow_drop_down,
-                        size: 35,
-                        color: Colors.teal.shade900,
-                      ),
-                      isExpanded: true,
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontFamily: 'Google Sans',
-                          color: Colors.black),
-                      items: this.colors.map<DropdownMenuItem<dynamic>>((dynamic value) {
-                        return DropdownMenuItem<dynamic>(
-                          value: value,
-                          child: Text(value["label"]),
-                        );
-                      }).toList(),
-                      onChanged: (newValue) {
-                        setState(() {
-                          this._color = newValue;
-                        });
-                      },
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  " Clarté",
-                  style: TextStyle(
-                      fontFamily: "Google Sans",
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.teal.shade900),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                Container(
-                  height: 35,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(width: 1.5, color: Colors.blueGrey),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: DropdownButton<dynamic>(
-                      value: _clarety,
-                      hint: Text("Purety "),
-                      underline: SizedBox(),
-                      icon: Icon(
-                        Icons.arrow_drop_down,
-                        size: 35,
-                        color: Colors.teal.shade900,
-                      ),
-                      isExpanded: true,
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontFamily: 'Google Sans',
-                          color: Colors.black),
-                      items: this.clareties.map<DropdownMenuItem<dynamic>>((dynamic value) {
-                        return DropdownMenuItem<dynamic>(
-                          value: value,
-                          child: Text(value["label"]),
-                        );
-                      }).toList(),
-                      onChanged: (newValue) {
-                        setState(() {
-                          this._clarety = newValue;
-                        });
-                      },
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Container(
-                    height: 35,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      border: Border.all(width: 1.5, color: Colors.blueGrey),
-                    ),
-                    child: TextField(
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: 'Google Sans',
-                          color: Colors.black87),
-                      textAlign: TextAlign.start,
-                      textAlignVertical: TextAlignVertical.center,
-                      decoration: InputDecoration(
-                          hintText: "length (mm)",
-                          contentPadding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                          hintStyle: TextStyle(fontSize: 16),
-                          border: InputBorder.none),
-                      onChanged: (value) {
-                        setState(() {
-                          this._length = double.parse(value);
-                        });
-                      },
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    height: 35,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      border: Border.all(width: 1.5, color: Colors.blueGrey),
-                    ),
-                    child: TextField(
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: 'Google Sans',
-                          color: Colors.black87),
-                      textAlign: TextAlign.start,
-                      textAlignVertical: TextAlignVertical.center,
-                      decoration: InputDecoration(
-                          hintText: "width (mm)",
-                          contentPadding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                          hintStyle: TextStyle(fontSize: 16),
-                          border: InputBorder.none),
-                      onChanged: (value) {
-                        setState(() {
-                          this._width = double.parse(value);
-                        });
-                      },
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    height: 35,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      border: Border.all(width: 1.5, color: Colors.blueGrey),
-                    ),
-                    child: TextField(
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: 'Google Sans',
-                          color: Colors.black87),
-                      textAlign: TextAlign.start,
-                      textAlignVertical: TextAlignVertical.center,
-                      decoration: InputDecoration(
-                          hintText: "depth (mm)",
-                          contentPadding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                          hintStyle: TextStyle(fontSize: 16),
-                          border: InputBorder.none),
-                      onChanged: (value) {
-                        setState(() {
-                          this._z_depth = double.parse(value);
-                        });
-                      },
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
-            child: FlatButton(
-                height: 40,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30)),
-                color: Colors.teal.shade500,
-                onPressed: () => {
-                    prediction()
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Estimer",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: Colors.white,
-                          fontFamily: 'Google Sans'),
-                    ),
-                  ],
-                )),
-          ),
-
-
-        ],
       ),
     );
   }
-}
-
-Widget _buildTopContent(double height) {
-  return SafeArea(
-    child: Align(
-      alignment: Alignment.topCenter,
-      child: Container(
-        padding: EdgeInsets.all(height * .08),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Text("MES COUPONS", style: TextStyle(
-          fontSize: 14,
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-          height: height,
-          fontFamily: "Google Sans",
-        )),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text("Total:", style: TextStyle(
-              fontSize: 14,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              height: height,
-              fontFamily: "Google Sans",
-            )),
-              ],
-            ),
-            Text("Achetez vos coupons ici", style: TextStyle(
-              fontSize: 14,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              height: height,
-              fontFamily: "Google Sans",
-            )),
-          ],
-        ),
-      ),
-    ),
-  );
 }

@@ -1,3 +1,4 @@
+import 'package:diamond_app/form_ui/form_diamond.dart';
 import 'package:flutter/material.dart';
 import 'package:giffy_dialog/giffy_dialog.dart';
 
@@ -136,7 +137,7 @@ class MyHomePage extends StatelessWidget {
                     onOkButtonPressed: (){
                       //go to add etablish screen
                       Navigator.pop(context);
-                      //Navigator.push(context, MaterialPageRoute(builder: (context)=>EtablishAdd()));
+                      //Navigator.push(context, MaterialPageRoute(builder: (context)=>DiamondForm()));
                     },
                     onlyOkButton: true,
                     buttonOkColor: Colors.teal.shade500,
