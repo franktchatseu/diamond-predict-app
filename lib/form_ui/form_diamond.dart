@@ -253,7 +253,7 @@ class _DiamondFormState extends State<DiamondForm> {
                 leading: Icon(Icons.settings,color: Colors.teal,),
                 title: Text('Notre Team',style: TextStyle(fontSize: 17,color: Colors.teal.shade900,fontFamily: 'Google Sans'),),
                 onTap: () {
-
+                  Navigator.popAndPushNamed(context, "/team");
                 },
               ),
             ],

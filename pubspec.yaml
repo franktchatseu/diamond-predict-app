@@ -23,6 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  url_launcher: ^5.7.5
 
   dio: ^3.0.2
   # The following adds the Cupertino Icons font to your application.
@@ -50,7 +51,12 @@ flutter:
     - images/
     - images/Header-Dark.png
     - images/rappi_basket.gif
-
+    - images/objet/torus.obj
+    - images/objet/torus.mtl
+    - images/objet/star.obj
+    - images/objet/star.mtl
+    - images/objet/cube.obj
+    - images/objet/cube.mtl
 
   fonts:
     - family: OpenSans

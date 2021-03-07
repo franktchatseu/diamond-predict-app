@@ -1,3 +1,4 @@
+import 'package:diamond_app/about-team/team.dart';
 import 'package:diamond_app/form_ui/form_diamond.dart';
 import 'package:flutter/material.dart';
 import 'introduction-page/demo.dart';
@@ -15,6 +16,7 @@ class MyApp extends StatelessWidget {
       home: GooeyEdgeDemo(title: 'Gooey Edge Demo'),
       routes: <String, WidgetBuilder>{
         '/predict': (BuildContext context) => DiamondForm(),
+        '/team': (BuildContext context) => Team(),
 
       },
     );
