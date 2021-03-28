@@ -10,7 +10,9 @@ workflows:
       xcode: latest
       cocoapods: default
     scripts:
-      - cd . && xcode-project use-profiles
+      - flutter clean
+      - flutter build ios --release
+      - xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner -configuration Release archive -archivePath /Runner.app/build/Runner.xcarchive;
     artifacts:
       - build/**/outputs/**/*.apk
       - build/**/outputs/**/*.aab
