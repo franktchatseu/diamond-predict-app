@@ -11,7 +11,7 @@ workflows:
       cocoapods: default
     scripts:
       - xcode-project use-profiles
-      - xcode-project build-ipa
+      - xcode-project build-ipa --workspace ios/Runner.xcworkspace --scheme Runner
     artifacts:
       - build/**/outputs/**/mapping.txt
       - build/ios/ipa/*.ipa
