@@ -1,14 +1,23 @@
-# Customize the codemagic.yaml file according to your project and commit it to the root of your repository
-# Check out https://docs.codemagic.io/getting-started/yaml/ for more information
-# You can also download your configuration from Worklow Editor to get started
+# Automatically generated on 2021-03-28 UTC from https://codemagic.io/app/606064fee47844d6fdd804b1/settings
+# Note that this configuration is not an exact match to UI settings. Review and adjust as necessary.
 
 workflows:
-  example-workflow:
-    name: Example Workflow
+  default-workflow:
+    name: Default Workflow
+    max_build_duration: 60
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
     scripts:
-      - name: Step name
-        script: flutter build apk --release
+      - xcode-project use-profiles
+      - flutter build ipa --export-options-plist=/Users/builder/export_options.plist
+    artifacts:
+      - build/**/outputs/**/mapping.txt
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - flutter_drive.log
     publishing:
       email:
         recipients:
-          - codemagic@example.com
+          - louenkamfrank@gmail.com
