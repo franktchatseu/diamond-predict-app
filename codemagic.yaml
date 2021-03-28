@@ -3,7 +3,7 @@
 
 workflows:
   default-workflow:
-    name: Default Workflow
+    name: My script
     max_build_duration: 60
     environment:
       flutter: stable
